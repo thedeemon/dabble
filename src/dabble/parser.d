@@ -78,8 +78,8 @@ class DabbleParser : Parser
     {
         if (!suppressMessages)  
 		{
-			uint column = index < tokens.length ? tokens[index].column : tokens[$ - 1].column;
-            uint line = index < tokens.length ? tokens[index].line : tokens[$ - 1].line;
+			uint column = cast(uint)(index < tokens.length ? tokens[index].column : tokens[$ - 1].column);
+            uint line = cast(uint)(index < cast(uint)tokens.length ? tokens[index].line : tokens[$ - 1].line);
             errors ~= tuple(line, column, message);         
 		}
         super.error(message, shouldAdvance);
@@ -122,7 +122,7 @@ class DabbleParser : Parser
 		source.insertInPlace(index + add, text);
 	
 		if (pos >= inserts.length) 
-			inserts ~= Insert(index, text.length);
+			inserts ~= Insert(index, cast(uint)text.length);
 		else 
 			inserts[pos][1] += text.length;		
 	}     
@@ -150,7 +150,7 @@ class DabbleParser : Parser
     
     int charIndex()
     {        
-        return index < tokens.length ? tokens[index].index : original.length;
+        return cast(uint)(index < tokens.length ? tokens[index].index : original.length);
     }
     
     auto wrap(E)(lazy E func)
@@ -440,8 +440,8 @@ class DabbleParser : Parser
         if (suppressMessages) 
             return;
                     
-        insert(start, "_REPL.exprResult(");
-        insert(end, ", __expressionResult)", true);                
+        insert(cast(uint)start, "_REPL.exprResult(");
+        insert(cast(uint)end, ", __expressionResult)", true);                
     }
     
     void clear()
